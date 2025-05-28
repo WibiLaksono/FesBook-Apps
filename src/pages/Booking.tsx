@@ -1,6 +1,5 @@
-
-import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,21 +8,37 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ArrowLeft, MapPin, Calendar, Clock, Users, AlertCircle } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, Clock, Users, AlertCircle, Timer } from "lucide-react";
 import { format } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 import Navbar from "@/components/Navbar";
 
 const Booking = () => {
-  const location = useLocation();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { venue, selectedDate, selectedTime } = location.state || {};
+
+  // Extract booking data from URL parameters
+  const venueId = searchParams.get('venueId');
+  const venueName = searchParams.get('venueName');
+  const venueLocation = searchParams.get('venueLocation');
+  const venuePrice = searchParams.get('venuePrice');
+  const selectedDateStr = searchParams.get('selectedDate');
+  const selectedTime = searchParams.get('selectedTime');
+  const selectedDuration = searchParams.get('selectedDuration');
 
   // Redirect if no booking data
-  if (!venue || !selectedDate || !selectedTime) {
+  if (!venueId || !venueName || !selectedDateStr || !selectedTime || !selectedDuration) {
     navigate("/catalog");
     return null;
   }
+
+  const selectedDate = new Date(selectedDateStr);
+  const venue = {
+    id: parseInt(venueId),
+    name: venueName,
+    shortLocation: venueLocation,
+    priceNum: parseInt(venuePrice || "0")
+  };
 
   const [currentStep, setCurrentStep] = useState(1);
   const [bookingData, setBookingData] = useState({
@@ -94,6 +109,15 @@ const Booking = () => {
     "Lainnya"
   ];
 
+  const durations = [
+    { value: "2", label: "2 jam", priceMultiplier: 0.5 },
+    { value: "4", label: "4 jam", priceMultiplier: 0.8 },
+    { value: "6", label: "6 jam", priceMultiplier: 1 },
+    { value: "8", label: "8 jam", priceMultiplier: 1.3 },
+    { value: "12", label: "12 jam", priceMultiplier: 1.8 },
+    { value: "24", label: "1 hari penuh", priceMultiplier: 2.5 }
+  ];
+
   const handleAnswerChange = (questionId: string, answer: string) => {
     setBookingData(prev => ({
       ...prev,
@@ -135,6 +159,7 @@ const Booking = () => {
         venue,
         selectedDate,
         selectedTime,
+        selectedDuration,
         bookingData,
         totalPrice: calculateTotalPrice()
       }
@@ -142,12 +167,13 @@ const Booking = () => {
   };
 
   const calculateTotalPrice = () => {
-    const basePrice = venue.priceNum;
+    const duration = durations.find(d => d.value === selectedDuration);
+    const basePrice = venue.priceNum * (duration?.priceMultiplier || 1);
     const additionalPrice = bookingData.additionalItems.reduce((total, itemId) => {
       const item = additionalItemsOptions.find(opt => opt.id === itemId);
       return total + (item?.price || 0);
     }, 0);
-    return basePrice + additionalPrice;
+    return Math.round(basePrice + additionalPrice);
   };
 
   const nextStep = () => {
@@ -156,6 +182,10 @@ const Booking = () => {
 
   const prevStep = () => {
     setCurrentStep(prev => Math.max(prev - 1, 1));
+  };
+
+  const getDurationLabel = () => {
+    return durations.find(d => d.value === selectedDuration)?.label || selectedDuration + " jam";
   };
 
   return (
@@ -437,6 +467,10 @@ const Booking = () => {
                         <Clock className="w-4 h-4" />
                         {selectedTime}
                       </div>
+                      <div className="flex items-center gap-2">
+                        <Timer className="w-4 h-4" />
+                        {getDurationLabel()}
+                      </div>
                       {bookingData.attendees && (
                         <div className="flex items-center gap-2">
                           <Users className="w-4 h-4" />
@@ -451,8 +485,8 @@ const Booking = () => {
                     <h4 className="font-semibold mb-3">Rincian Harga</h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span>Harga venue</span>
-                        <span>Rp {venue.priceNum.toLocaleString()}</span>
+                        <span>Harga venue ({getDurationLabel()})</span>
+                        <span>Rp {Math.round(venue.priceNum * (durations.find(d => d.value === selectedDuration)?.priceMultiplier || 1)).toLocaleString()}</span>
                       </div>
                       
                       {/* Additional Items */}

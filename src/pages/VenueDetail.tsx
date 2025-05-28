@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   MapPin, 
   Users, 
@@ -30,6 +31,7 @@ const VenueDetail = () => {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [selectedTime, setSelectedTime] = useState("");
+  const [selectedDuration, setSelectedDuration] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Mock data - in real app, fetch based on id
@@ -68,6 +70,14 @@ const VenueDetail = () => {
     availableTimes: [
       "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00", "19:00", "20:00"
     ],
+    durations: [
+      { value: "2", label: "2 jam", priceMultiplier: 0.5 },
+      { value: "4", label: "4 jam", priceMultiplier: 0.8 },
+      { value: "6", label: "6 jam", priceMultiplier: 1 },
+      { value: "8", label: "8 jam", priceMultiplier: 1.3 },
+      { value: "12", label: "12 jam", priceMultiplier: 1.8 },
+      { value: "24", label: "1 hari penuh", priceMultiplier: 2.5 }
+    ],
     host: {
       name: "PT. Premium Venues",
       email: "booking@premiumvenues.com",
@@ -92,19 +102,23 @@ const VenueDetail = () => {
   };
 
   const handleBooking = () => {
-    if (!selectedDate || !selectedTime) {
-      alert("Silakan pilih tanggal dan waktu terlebih dahulu");
+    if (!selectedDate || !selectedTime || !selectedDuration) {
+      alert("Silakan pilih tanggal, waktu, dan durasi terlebih dahulu");
       return;
     }
     
-    // Navigate to booking form with selected data
-    navigate("/booking", {
-      state: {
-        venue,
-        selectedDate,
-        selectedTime
-      }
+    // Navigate to booking form with selected data as URL params to avoid cloning issues
+    const searchParams = new URLSearchParams({
+      venueId: venue.id.toString(),
+      venueName: venue.name,
+      venueLocation: venue.shortLocation,
+      venuePrice: venue.priceNum.toString(),
+      selectedDate: selectedDate.toISOString(),
+      selectedTime: selectedTime,
+      selectedDuration: selectedDuration
     });
+    
+    navigate(`/booking?${searchParams.toString()}`);
   };
 
   // Check if date is available (disable past dates and dates more than 5 days from today)
@@ -114,6 +128,12 @@ const VenueDetail = () => {
     maxDate.setDate(today.getDate() + 5);
     
     return date < today || date > maxDate;
+  };
+
+  const calculateTotalPrice = () => {
+    const duration = venue.durations.find(d => d.value === selectedDuration);
+    if (!duration) return venue.priceNum;
+    return Math.round(venue.priceNum * duration.priceMultiplier);
   };
 
   return (
@@ -282,7 +302,7 @@ const VenueDetail = () => {
                 <CardHeader>
                   <CardTitle className="text-2xl text-center">Book Venue</CardTitle>
                   <CardDescription className="text-center">
-                    Pilih tanggal dan waktu yang tersedia
+                    Pilih tanggal, waktu, dan durasi yang tersedia
                   </CardDescription>
                 </CardHeader>
                 
@@ -307,7 +327,7 @@ const VenueDetail = () => {
 
                   {/* Time Selection */}
                   <div>
-                    <h4 className="font-semibold mb-3">Pilih Waktu</h4>
+                    <h4 className="font-semibold mb-3">Pilih Waktu Mulai</h4>
                     <div className="grid grid-cols-2 gap-2">
                       {venue.availableTimes.map((time) => (
                         <Button
@@ -323,13 +343,40 @@ const VenueDetail = () => {
                     </div>
                     {selectedTime && (
                       <p className="text-sm text-blue-600 mt-2">
-                        Waktu terpilih: {selectedTime}
+                        Waktu mulai: {selectedTime}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Duration Selection */}
+                  <div>
+                    <h4 className="font-semibold mb-3">Pilih Durasi</h4>
+                    <Select value={selectedDuration} onValueChange={setSelectedDuration}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Pilih durasi booking" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {venue.durations.map((duration) => (
+                          <SelectItem key={duration.value} value={duration.value}>
+                            <div className="flex justify-between items-center w-full">
+                              <span>{duration.label}</span>
+                              <span className="ml-4 text-blue-600 font-medium">
+                                Rp {Math.round(venue.priceNum * duration.priceMultiplier).toLocaleString()}
+                              </span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {selectedDuration && (
+                      <p className="text-sm text-blue-600 mt-2">
+                        Durasi: {venue.durations.find(d => d.value === selectedDuration)?.label}
                       </p>
                     )}
                   </div>
 
                   {/* Booking Summary */}
-                  {selectedDate && selectedTime && (
+                  {selectedDate && selectedTime && selectedDuration && (
                     <div className="p-4 bg-blue-50 rounded-lg">
                       <h4 className="font-semibold text-gray-900 mb-2">Ringkasan Booking</h4>
                       <div className="space-y-1 text-sm">
@@ -343,9 +390,17 @@ const VenueDetail = () => {
                           <span>Waktu:</span>
                           <span className="font-medium">{selectedTime}</span>
                         </div>
+                        <div className="flex justify-between">
+                          <span>Durasi:</span>
+                          <span className="font-medium">
+                            {venue.durations.find(d => d.value === selectedDuration)?.label}
+                          </span>
+                        </div>
                         <div className="flex justify-between pt-2 border-t border-blue-200">
                           <span>Total:</span>
-                          <span className="font-bold text-blue-600">{venue.price}</span>
+                          <span className="font-bold text-blue-600">
+                            Rp {calculateTotalPrice().toLocaleString()}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -354,16 +409,16 @@ const VenueDetail = () => {
                   {/* Book Button */}
                   <Button 
                     onClick={handleBooking}
-                    disabled={!selectedDate || !selectedTime}
+                    disabled={!selectedDate || !selectedTime || !selectedDuration}
                     className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg py-6"
                   >
-                    {!selectedDate || !selectedTime ? "Pilih Tanggal & Waktu" : "Lanjut ke Booking"}
+                    {!selectedDate || !selectedTime || !selectedDuration ? "Pilih Tanggal, Waktu & Durasi" : "Lanjut ke Booking"}
                   </Button>
 
-                  {/* Login Notice */}
+                  {/* Info Notice */}
                   <div className="text-center text-sm text-gray-600 p-3 bg-gray-50 rounded-lg">
-                    <Users className="w-5 h-5 mx-auto mb-2 text-gray-400" />
-                    Anda perlu login untuk melanjutkan booking
+                    <Clock className="w-5 h-5 mx-auto mb-2 text-gray-400" />
+                    Tidak perlu login untuk melihat halaman booking
                   </div>
                 </CardContent>
               </Card>
