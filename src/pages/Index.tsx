@@ -49,7 +49,7 @@ const Index = () => {
       <section className="pt-20 pb-16 px-4">
         <div className="container mx-auto text-center">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
+            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6 mt-">
               Temukan Venue Impian Anda
             </h1>
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
@@ -63,7 +63,7 @@ const Index = () => {
                 </Button>
               </Link>
               <Link to="/host-dashboard">
-                <Button variant="outline" size="lg" className="px-8 py-3 text-lg border-blue-300 hover:bg-blue-50">
+                <Button variant="outline" size="lg" className="px-8 py-3 text-lg border-blue-300 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600">
                   Daftar sebagai Host
                 </Button>
               </Link>

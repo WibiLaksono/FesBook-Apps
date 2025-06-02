@@ -121,14 +121,17 @@ const VenueDetail = () => {
     navigate(`/booking?${searchParams.toString()}`);
   };
 
-  // Check if date is available (disable past dates and dates more than 5 days from today)
-  const isDateDisabled = (date: Date) => {
-    const today = new Date();
-    const maxDate = new Date();
-    maxDate.setDate(today.getDate() + 5);
-    
-    return date < today || date > maxDate;
-  };
+// Disable dates before H+5 from today
+const isDateDisabled = (date: Date) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Normalisasi waktu ke 00:00
+
+  const minDate = new Date(today);
+  minDate.setDate(today.getDate() + 5); // H+5
+
+  return date < minDate; // Hanya izinkan booking mulai H+5
+};
+
 
   const calculateTotalPrice = () => {
     const duration = venue.durations.find(d => d.value === selectedDuration);
