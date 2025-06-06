@@ -80,11 +80,11 @@ const Auth = () => {
 
         <Card className="border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
           <CardHeader className="text-center pb-6">
-            <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-bold text-2xl">V</span>
+            <div className="flex items-center justify-center mb-4">
+              <img src="/FesBook Logo.png" alt="Logo" className="h-16 w-16" />
             </div>
             <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              VenueSpace
+              FesBook
             </CardTitle>
             <CardDescription>
               Masuk atau daftar untuk mulai booking venue

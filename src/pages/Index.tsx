@@ -13,31 +13,40 @@ const Index = () => {
       id: 1,
       name: "Sky Lounge Premium",
       location: "Jakarta Selatan",
-      capacity: "20-50 orang",
-      price: "Rp 2.500.000",
+      capacity: "200-400 orang",
+      price: "Rp 12.500.000",
+      priceNum: 12500000,
       rating: 4.8,
+      reviews: 124,
       image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500&h=300&fit=crop",
-      facilities: ["WiFi", "AC", "Projector", "Catering"]
+      facilities: ["WiFi", "AC", "Projector", "Catering", "Sound System"],
+      type: "Meeting Room"
     },
     {
       id: 2,
       name: "Garden Space",
       location: "Bandung",
-      capacity: "10-30 orang",
-      price: "Rp 1.800.000",
+      capacity: "100-200 orang",
+      price: "Rp 7.800.000",
+      priceNum: 7800000,
       rating: 4.6,
+      reviews: 89,
       image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=500&h=300&fit=crop",
-      facilities: ["Outdoor", "WiFi", "Sound System"]
+      facilities: ["Outdoor", "WiFi", "Sound System", "Parking"],
+      type: "Outdoor Space"
     },
     {
       id: 3,
       name: "Modern Co-Space",
       location: "Jakarta Pusat",
-      capacity: "5-20 orang",
-      price: "Rp 1.200.000",
+      capacity: "50-100 orang",
+      price: "Rp 3.200.000",
+      priceNum: 3200000,
       rating: 4.9,
+      reviews: 156,
       image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&h=300&fit=crop",
-      facilities: ["WiFi", "AC", "Meeting Room", "Kitchen"]
+      facilities: ["WiFi", "AC", "Meeting Room", "Kitchen", "Workspace"],
+      type: "Co-working"
     }
   ];
 
@@ -62,7 +71,7 @@ const Index = () => {
                   Jelajahi Venue
                 </Button>
               </Link>
-              <Link to="/host-dashboard">
+              <Link to="/Form-Host">
                 <Button variant="outline" size="lg" className="px-8 py-3 text-lg border-blue-300 hover:text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600">
                   Daftar sebagai Host
                 </Button>

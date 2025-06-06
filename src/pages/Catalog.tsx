@@ -20,9 +20,9 @@ const Catalog = () => {
       id: 1,
       name: "Sky Lounge Premium",
       location: "Jakarta Selatan",
-      capacity: "20-50 orang",
-      price: "Rp 2.500.000",
-      priceNum: 2500000,
+      capacity: "200-400 orang",
+      price: "Rp 12.500.000",
+      priceNum: 12500000,
       rating: 4.8,
       reviews: 124,
       image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500&h=300&fit=crop",
@@ -33,9 +33,9 @@ const Catalog = () => {
       id: 2,
       name: "Garden Space",
       location: "Bandung",
-      capacity: "10-30 orang",
-      price: "Rp 1.800.000",
-      priceNum: 1800000,
+      capacity: "100-200 orang",
+      price: "Rp 7.800.000",
+      priceNum: 7800000,
       rating: 4.6,
       reviews: 89,
       image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=500&h=300&fit=crop",
@@ -46,9 +46,9 @@ const Catalog = () => {
       id: 3,
       name: "Modern Co-Space",
       location: "Jakarta Pusat",
-      capacity: "5-20 orang",
-      price: "Rp 1.200.000",
-      priceNum: 1200000,
+      capacity: "50-100 orang",
+      price: "Rp 3.200.000",
+      priceNum: 3200000,
       rating: 4.9,
       reviews: 156,
       image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&h=300&fit=crop",
@@ -59,9 +59,9 @@ const Catalog = () => {
       id: 4,
       name: "Executive Hall",
       location: "Surabaya",
-      capacity: "50-100 orang",
-      price: "Rp 4.200.000",
-      priceNum: 4200000,
+      capacity: "200-400 orang",
+      price: "Rp 14.200.000",
+      priceNum: 14200000,
       rating: 4.7,
       reviews: 92,
       image: "https://images.unsplash.com/photo-1561501900-3701fa6a0864?w=500&h=300&fit=crop",
@@ -72,9 +72,9 @@ const Catalog = () => {
       id: 5,
       name: "Creative Studio",
       location: "Jakarta Barat",
-      capacity: "15-40 orang",
-      price: "Rp 1.900.000",
-      priceNum: 1900000,
+      capacity: "100-200 orang",
+      price: "Rp 8.900.000",
+      priceNum: 8900000,
       rating: 4.5,
       reviews: 67,
       image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=500&h=300&fit=crop",
@@ -85,7 +85,7 @@ const Catalog = () => {
       id: 6,
       name: "Rooftop Terrace",
       location: "Jakarta Selatan",
-      capacity: "30-80 orang",
+      capacity: "50-100 orang",
       price: "Rp 3.500.000",
       priceNum: 3500000,
       rating: 4.8,
@@ -97,8 +97,8 @@ const Catalog = () => {
   ];
 
   const cities = ["Jakarta Selatan", "Jakarta Pusat", "Jakarta Barat", "Bandung", "Surabaya"];
-  const capacityRanges = ["5-20 orang", "20-50 orang", "50+ orang"];
-  const priceRanges = ["< Rp 1.500.000", "Rp 1.500.000 - Rp 3.000.000", "> Rp 3.000.000"];
+  const capacityRanges = ["50-100 orang", "100-200 orang", "200-400 orang", "400+ orang"];
+  const priceRanges = ["< Rp 5.000.000", "Rp 5.000.000 - Rp 10.000.000", "> Rp 10.000.000"];
 
   const filteredVenues = venues.filter(venue => {
     const matchesSearch = venue.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -110,9 +110,9 @@ const Catalog = () => {
     const matchesCapacity = !selectedCapacity || venue.capacity === selectedCapacity;
     
     const matchesPrice = !priceRange || 
-                        (priceRange === "< Rp 1.500.000" && venue.priceNum < 1500000) ||
-                        (priceRange === "Rp 1.500.000 - Rp 3.000.000" && venue.priceNum >= 1500000 && venue.priceNum <= 3000000) ||
-                        (priceRange === "> Rp 3.000.000" && venue.priceNum > 3000000);
+                        (priceRange === "< Rp 5.000.000" && venue.priceNum < 5000000) ||
+                        (priceRange === "Rp 5.000.000 - Rp 10.000.000" && venue.priceNum >= 5000000 && venue.priceNum <= 10000000) ||
+                        (priceRange === "> Rp 10.000.000" && venue.priceNum > 10000000);
     
     return matchesSearch && matchesCity && matchesCapacity && matchesPrice;
   });
@@ -136,7 +136,7 @@ const Catalog = () => {
               Catalog Venue
             </h1>
             <p className="text-gray-600 text-lg">
-              Temukan venue perfect untuk event Anda dari {venues.length} pilihan terbaik
+              Temukan venue perfect untuk event Anda dari venue yang tersedia!
             </p>
           </div>
 

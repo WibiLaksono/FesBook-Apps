@@ -34,7 +34,7 @@ const Navbar = () => {
             <img src="/FesBook Logo.png" alt="Logo" className="h-8 w-8" />
             {/* Gradient Text */}
             <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              FesbBook
+              FesBook
             </span>
           </Link>
 

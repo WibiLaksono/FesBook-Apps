@@ -12,6 +12,7 @@ import Booking from "./pages/Booking";
 import BookingStatus from "./pages/BookingStatus";
 import HostDashboard from "./pages/HostDashboard";
 import NotFound from "./pages/NotFound";
+import FormHost from "./pages/FormHost";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/booking" element={<Booking />} />
           <Route path="/booking-status" element={<BookingStatus />} />
           <Route path="/host-dashboard" element={<HostDashboard />} />
+          <Route path="/form-host" element={<FormHost />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -62,7 +62,7 @@ const Booking = () => {
       id: "purpose",
       question: "Apa tujuan acara yang akan dilaksanakan?",
       type: "radio",
-      options: ["Meeting/Rapat", "Workshop/Training", "Seminar", "Gathering", "Lainnya"],
+      options: ["Festival Lukisan", "Festival Musik", "Festival Budaya", "Festival Film", "Festival Makanan"],
       required: true
     },
     {

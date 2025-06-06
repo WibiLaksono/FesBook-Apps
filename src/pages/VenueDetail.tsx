@@ -421,7 +421,7 @@ const isDateDisabled = (date: Date) => {
                   {/* Info Notice */}
                   <div className="text-center text-sm text-gray-600 p-3 bg-gray-50 rounded-lg">
                     <Clock className="w-5 h-5 mx-auto mb-2 text-gray-400" />
-                    Tidak perlu login untuk melihat halaman booking
+                    Harus Daftar/login untuk melanjutkan booking
                   </div>
                 </CardContent>
               </Card>
